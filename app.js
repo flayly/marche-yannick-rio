@@ -531,6 +531,22 @@ const champs = [
 ];
 
 champs.forEach(id => {
+// --- AFFICHAGE DES PRODUITS ---
+const conteneurProduits = document.getElementById("conteneur-produits"); 
+// Remplace "conteneur-produits" par l'ID réel de ta div HTML si nécessaire
+
+if (conteneurProduits) {
+  produits.forEach(produit => {
+    const div = document.createElement("div");
+    div.className = "produit-item";
+    div.innerHTML = `
+      <h3>${produit.nom}</h3>
+      <p>Catégorie : ${produit.categorie}</p>
+      <p>Prix : ${produit.prix} RD$</p>
+    `;
+    conteneurProduits.appendChild(div);
+  });
+}
 
   const element = document.getElementById(id);
 
