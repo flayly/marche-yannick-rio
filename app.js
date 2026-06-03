@@ -1,3 +1,6 @@
+// ==========================================
+// 1. LISTE DES PRODUITS AVEC ICÔNES ET PRIX
+// ==========================================
 const produits = [
   /* PETIT-DEJEUNER */
   { categorie: "Petit-déjeuner", icone: "☕", nom: "Café moulu Santo Domingo", prix: 180 },
@@ -61,10 +64,11 @@ const produits = [
   { categorie: "Fruits & légumes", icone: "🍉", nom: "Pastèque", prix: 180 }
 ];
 
-produits.forEach(produit => { produit.quantite = 0; });
+// Assigner une quantité initiale globale
+produits.forEach(p => { p.quantite = 0; });
 
+// Sauvegarde automatique des données saisies
 const champs = ["villa", "client", "telephone", "date", "commentaires"];
-
 champs.forEach(id => {
   const element = document.getElementById(id);
   if (element) {
@@ -75,6 +79,7 @@ champs.forEach(id => {
   }
 });
 
+// Fonction globale de mise à jour des calculs
 function mettreAJourTotal() {
   let totalGeneral = 0;
   let totalArticles = 0;
@@ -98,36 +103,36 @@ function mettreAJourTotal() {
   if (totalElem) totalElem.innerText = totalGeneral.toFixed(2);
 }
 
+// Attacher les fonctions au navigateur
 window.ajouter = function(index) {
-  produits[index].quantite++;
-  mettreAJourTotal();
+  if (produits[index]) {
+    produits[index].quantite++;
+    mettreAJourTotal();
+  }
 };
 
 window.enlever = function(index) {
-  if (produits[index].quantite > 0) {
+  if (produits[index] && produits[index].quantite > 0) {
     produits[index].quantite--;
     mettreAJourTotal();
   }
 };
 
 window.viderPanier = function() {
-  produits.forEach(produit => { produit.quantite = 0; });
+  produits.forEach(p => { p.quantite = 0; });
   mettreAJourTotal();
 };
 
+// Génération de la commande textuelle
 function genererTexteCommande() {
-  const villa = document.getElementById("villa") ? document.getElementById("villa").value : "Non spécifiée";
-  const client = document.getElementById("client") ? document.getElementById("client").value : "Non spécifié";
-  const telephone = document.getElementById("telephone") ? document.getElementById("telephone").value : "Non spécifié";
-  const date = document.getElementById("date") ? document.getElementById("date").value : "Non spécifiée";
-  const commentaires = document.getElementById("commentaires") ? document.getElementById("commentaires").value : "Aucun";
-
+  const getVal = (id) => document.getElementById(id) ? document.getElementById(id).value : "Non renseigné";
+  
   let message = `🌴 *BON DE COMMANDE - YANNICK RIO* 🌴\n\n`;
-  message += `🏢 *Villa :* ${villa}\n`;
-  message += `👤 *Client :* ${client}\n`;
-  message += `📞 *Tél :* ${telephone}\n`;
-  message += `📅 *Date de livraison :* ${date}\n`;
-  message += `📝 *Commentaires :* ${commentaires}\n\n`;
+  message += `🏢 *Villa :* ${getVal("villa")}\n`;
+  message += `👤 *Client :* ${getVal("client")}\n`;
+  message += `📞 *Tél :* ${getVal("telephone")}\n`;
+  message += `📅 *Date :* ${getVal("date")}\n`;
+  message += `📝 *Commentaires :* ${getVal("commentaires")}\n\n`;
   message += `🛒 *ARTICLES COMMANDÉS :*\n`;
   message += `-------------------------------------------\n`;
 
@@ -154,33 +159,29 @@ function genererTexteCommande() {
 window.envoyerWhatsApp = function() {
   const texte = genererTexteCommande();
   if (!texte) {
-    alert("Votre panier est vide ! Ajoutez des produits avant d'envoyer.");
+    alert("Votre panier est vide !");
     return;
   }
-  const numeroWhatsApp = "19496335007"; 
-  const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(texte)}`;
+  const url = `https://wa.me/19496335007?text=${encodeURIComponent(texte)}`;
   window.open(url, "_blank");
 };
 
 window.envoyerEmail = function() {
   const texte = genererTexteCommande();
   if (!texte) {
-    alert("Votre panier est vide ! Ajoutez des produits avant d'envoyer.");
+    alert("Votre panier est vide !");
     return;
   }
-  const villa = document.getElementById("villa") ? document.getElementById("villa").value : "";
-  const client = document.getElementById("client") ? document.getElementById("client").value : "";
-  const monEmail = "flayly@hotmail.fr";
-  const sujet = `Commande Marché Yannick - Villa ${villa} - ${client}`;
-  const texteEmail = texte.replace(/\*/g, "");
-  const url = `mailto:${monEmail}?subject=${encodeURIComponent(sujet)}&body=${encodeURIComponent(texteEmail)}`;
+  const txtEmail = texte.replace(/\*/g, "");
+  const url = `mailto:flayly@hotmail.fr?subject=Commande%20Marché%20Yannick&body=${encodeURIComponent(txtEmail)}`;
   window.open(url, "_blank");
 };
 
 window.payer = function() {
-  alert("Fonction de paiement bientôt disponible.");
+  alert("Paiement bientôt disponible.");
 };
 
+// Chargement initial du catalogue dès que la page HTML est prête
 const catalogue = document.getElementById("catalogue");
 if (catalogue) {
   catalogue.innerHTML = "";
@@ -198,9 +199,9 @@ if (catalogue) {
       </div>
       <div class="produit-actions">
         <div class="quantite-controls">
-          <button class="btn-qte" onclick="ajouter(${index})">+</button>
-          <span class="qte-valeur" id="qte-${index}">${produit.quantite}</span>
-          <button class="btn-qte" onclick="enlever(${index})">-</button>
+          <button class="btn-qte" onclick="window.ajouter(${index})">+</button>
+          <span class="qte-valeur" id="qte-${index}">0</span>
+          <button class="btn-qte" onclick="window.enlever(${index})">-</button>
         </div>
         <p class="soustotal" id="soustotal-${index}">0.00 RD$</p>
       </div>
@@ -208,138 +209,4 @@ if (catalogue) {
     catalogue.appendChild(div);
   });
   mettreAJourTotal();
-}
-
-  document.getElementById("nbArticles").innerText = totalArticles;
-  document.getElementById("total").innerText = totalGeneral.toFixed(2);
-}
-
-function ajouter(index) {
-  produits[index].quantite++;
-  mettreAJourTotal();
-}
-
-function enlever(index) {
-  if (produits[index].quantite > 0) {
-    produits[index].quantite--;
-    mettreAJourTotal();
-  }
-}
-
-function viderPanier() {
-  produits.forEach(produit => produit.quantite = 0);
-  mettreAJourTotal();
-}
-
-// ==========================================
-// 4. CONSTRUCTION DU TEXTE DE LA COMMANDE
-// ==========================================
-function genererTexteCommande() {
-  const villa = document.getElementById("villa").value || "Non spécifiée";
-  const client = document.getElementById("client").value || "Non spécifié";
-  const telephone = document.getElementById("telephone").value || "Non spécifié";
-  const date = document.getElementById("date").value || "Non spécifiée";
-  const commentaires = document.getElementById("commentaires").value || "Aucun";
-
-  let message = `🌴 *BON DE COMMANDE - YANNICK RIO* 🌴\n\n`;
-  message += `🏢 *Villa :* ${villa}\n`;
-  message += `👤 *Client :* ${client}\n`;
-  message += `📞 *Tél :* ${telephone}\n`;
-  message += `📅 *Date de livraison :* ${date}\n`;
-  message += `📝 *Commentaires :* ${commentaires}\n\n`;
-  message += `🛒 *ARTICLES COMMANDÉS :*\n`;
-  message += `-------------------------------------------\n`;
-
-  let totalGeneral = 0;
-  let aDesArticles = false;
-
-  produits.forEach(produit => {
-    if (produit.quantite > 0) {
-      aDesArticles = true;
-      const totalLigne = produit.prix * produit.quantite;
-      totalGeneral += totalLigne;
-      message += `${produit.icone} ${produit.nom}\n`;
-      message += `   Quantité : ${produit.quantite} x ${produit.prix} RD$ = *${totalLigne} RD$*\n`;
-    }
-  });
-
-  if (!aDesArticles) {
-    return null;
-  }
-
-  message += `-------------------------------------------\n`;
-  message += `💰 *TOTAL GÉNÉRAL : ${totalGeneral} RD$*`;
-  return message;
-}
-
-// ==========================================
-// 5. ENVOI DES DONNÉES (WHATSAPP & EMAIL)
-// ==========================================
-function envoyerWhatsApp() {
-  const texte = genererTexteCommande();
-  if (!texte) {
-    alert("Votre panier est vide ! Ajoutez des produits avant d'envoyer.");
-    return;
-  }
-
-  // Ton numéro configuré au format international
-  const numeroWhatsApp = "19496335007"; 
-  const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(texte)}`;
-  window.open(url, "_blank");
-}
-
-function envoyerEmail() {
-  const texte = genererTexteCommande();
-  if (!texte) {
-    alert("Votre panier est vide ! Ajoutez des produits avant d'envoyer.");
-    return;
-  }
-
-  const villa = document.getElementById("villa").value || "";
-  const client = document.getElementById("client").value || "";
-  
-  const monEmail = "flayly@hotmail.fr";
-  const sujet = `Commande Marché Yannick - Villa ${villa} - ${client}`;
-  
-  // Remplacement des syntaxes de gras WhatsApp (*) par du texte brut propre pour l'email
-  const texteEmail = texte.replace(/\*/g, "");
-
-  const url = `mailto:${monEmail}?subject=${encodeURIComponent(sujet)}&body=${encodeURIComponent(texteEmail)}`;
-  window.open(url, "_blank");
-}
-
-// ==========================================
-// 6. AFFICHAGE INITIAL DES PRODUITS
-// ==========================================
-const catalogue = document.getElementById("catalogue");
-
-if (catalogue) {
-  catalogue.innerHTML = "";
-
-  produits.forEach((produit, index) => {
-    const div = document.createElement("div");
-    div.className = "produit-item";
-    div.innerHTML = `
-      <div class="produit-info">
-        <span class="produit-icone">${produit.icone}</span>
-        <div>
-          <h3>${produit.nom}</h3>
-          <p class="categorie">${produit.categorie}</p>
-          <p class="prix">${produit.prix.toFixed(2)} RD$</p>
-        </div>
-      </div>
-      <div class="produit-actions">
-        <div class="quantite-controls">
-          <button class="btn-qte" onclick="enlever(${index})">-</button>
-          <span class="qte-valeur" id="qte-${index}">${produit.quantite}</span>
-          <button class="btn-qte" onclick="ajouter(${index})">+</button>
-        </div>
-        <p class="soustotal" id="soustotal-${index}">0.00 RD$</p>
-      </div>
-    `;
-    catalogue.appendChild(div);
-  });
-
-  mettreAJourTotal();
-}
 }
