@@ -1,0 +1,98 @@
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#fff8ec;
+}
+
+.header{
+    text-align:center;
+    padding:20px;
+    color:white;
+    background:linear-gradient(
+        90deg,
+        #f4a261,
+        #e76f51,
+        #2a9d8f
+    );
+}
+
+.container{
+    padding:15px;
+}
+
+.client-box input,
+.client-box textarea,
+#search{
+    width:100%;
+    box-sizing:border-box;
+    padding:10px;
+    margin-bottom:10px;
+    border-radius:8px;
+    border:1px solid #ccc;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:10px;
+}
+
+.card{
+    background:white;
+    border-radius:12px;
+    padding:10px;
+    box-shadow:0 2px 8px rgba(0,0,0,.15);
+}
+
+.card img{
+    width:100%;
+    height:100px;
+    object-fit:cover;
+    border-radius:8px;
+}
+
+.nom{
+    font-weight:bold;
+    margin-top:8px;
+}
+
+.prix{
+    color:#555;
+}
+
+.sousTotal{
+    color:#2a9d8f;
+    font-weight:bold;
+}
+
+.qteBox{
+    display:flex;
+    justify-content:center;
+    gap:10px;
+    margin-top:10px;
+}
+
+.qteBox button{
+    width:35px;
+    height:35px;
+}
+
+.panier{
+    margin-top:20px;
+    font-size:20px;
+    font-weight:bold;
+}
+
+.actions{
+    margin-top:20px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+.actions button{
+    padding:15px;
+    border:none;
+    border-radius:8px;
+    font-size:16px;
+}  
