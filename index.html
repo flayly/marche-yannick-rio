@@ -4,10 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Le marché de Yannick à Rio</title>
-
     <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
 <header class="header">
@@ -20,21 +18,20 @@
     <div class="client-box">
         <input type="text" id="villa" placeholder="Villa">
         <input type="text" id="client" placeholder="Nom du client">
-        <input type="tel" id="telephone" placeholder="T�l�phone">
+        <input type="tel" id="telephone" placeholder="Téléphone">
         <input type="date" id="date">
         <textarea id="commentaires" placeholder="Commentaires"></textarea>
     </div>
 
-    <input type="text" id="search" placeholder=" Rechercher un produit...">
+    <input type="text" id="search" placeholder="🔍 Rechercher un produit...">
 
     <div id="catalogue"></div>
 
     <div class="panier">
         <div>
-            Articles s�lectionn�s :
+            Articles sélectionnés :
             <span id="nbArticles">0</span>
         </div>
-
         <div>
             Total :
             <span id="total">0</span> RD$
@@ -43,19 +40,16 @@
 
     <div class="actions">
         <button onclick="envoyerWhatsApp()">
-             Envoyer WhatsApp
+            💬 Envoyer WhatsApp
         </button>
-
         <button onclick="envoyerEmail()">
-             Envoyer Email
+            ✉️ Envoyer Email
         </button>
-
         <button onclick="payer()">
-             Payer en ligne
+            💳 Payer en ligne
         </button>
-
         <button onclick="viderPanier()">
-             Vider le panier
+            🗑️ Vider le panier
         </button>
     </div>
 
