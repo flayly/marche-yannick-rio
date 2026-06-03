@@ -1,1 +1,67 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Le march� de Yannick � Rio</title>
 
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header class="header">
+    <h1> Le march� de Yannick � Rio </h1>
+    <p>Produits pour les villas de Rio San Juan</p>
+</header>
+
+<div class="container">
+
+    <div class="client-box">
+        <input type="text" id="villa" placeholder="Villa">
+        <input type="text" id="client" placeholder="Nom du client">
+        <input type="tel" id="telephone" placeholder="T�l�phone">
+        <input type="date" id="date">
+        <textarea id="commentaires" placeholder="Commentaires"></textarea>
+    </div>
+
+    <input type="text" id="search" placeholder=" Rechercher un produit...">
+
+    <div id="catalogue"></div>
+
+    <div class="panier">
+        <div>
+            Articles s�lectionn�s :
+            <span id="nbArticles">0</span>
+        </div>
+
+        <div>
+            Total :
+            <span id="total">0</span> RD$
+        </div>
+    </div>
+
+    <div class="actions">
+        <button onclick="envoyerWhatsApp()">
+             Envoyer WhatsApp
+        </button>
+
+        <button onclick="envoyerEmail()">
+             Envoyer Email
+        </button>
+
+        <button onclick="payer()">
+             Payer en ligne
+        </button>
+
+        <button onclick="viderPanier()">
+             Vider le panier
+        </button>
+    </div>
+
+</div>
+
+<script src="app.js"></script>
+
+</body>
+</html>
