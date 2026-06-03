@@ -181,32 +181,73 @@ window.payer = function() {
   alert("Paiement bientôt disponible.");
 };
 
-// Chargement initial du catalogue dès que la page HTML est prête
+// Chargement initial du catalogue sous forme de tableau à deux colonnes pour mobile
 const catalogue = document.getElementById("catalogue");
 if (catalogue) {
   catalogue.innerHTML = "";
-  produits.forEach((produit, index) => {
-    const div = document.createElement("div");
-    div.className = "produit-item";
-    div.innerHTML = `
-      <div class="produit-info">
-        <span class="produit-icone">${produit.icone}</span>
-        <div>
-          <h3>${produit.nom}</h3>
-          <p class="categorie">${produit.categorie}</p>
-          <p class="prix">${produit.prix.toFixed(2)} RD$</p>
+  
+  // Création du conteneur tableau
+  const table = document.createElement("table");
+  table.style.width = "100%";
+  table.style.borderCollapse = "collapse";
+  
+  let htmlContenu = "";
+
+  // On parcourt les produits deux par deux pour faire les deux colonnes de la grille
+  for (let i = 0; i < produits.length; i += 2) {
+    htmlContenu += `<tr>`;
+
+    // Première colonne (Produit de gauche)
+    const p1 = produits[i];
+    htmlContenu += `
+      <td style="width: 50%; padding: 8px; border: 1px solid #eee; vertical-align: top;">
+        <div style="text-align: center; margin-bottom: 6px;">
+          <span style="font-size: 24px;">${p1.icone}</span>
+          <h3 style="font-size: 14px; margin: 4px 0 2px 0; color: #333; font-weight: bold; line-height: 1.2;">${p1.nom}</h3>
+          <p style="font-size: 11px; margin: 0; color: #888;">${p1.categorie}</p>
+          <p style="font-size: 13px; margin: 4px 0; color: #2ecc71; font-weight: bold;">${p1.prix.toFixed(2)} RD$</p>
         </div>
-      </div>
-      <div class="produit-actions">
-        <div class="quantite-controls">
-          <button class="btn-qte" onclick="window.ajouter(${index})">+</button>
-          <span class="qte-valeur" id="qte-${index}">0</span>
-          <button class="btn-qte" onclick="window.enlever(${index})">-</button>
+        <div style="display: block; text-align: center;">
+          <div style="display: inline-flex; align-items: center; background: #f1f2f6; border-radius: 20px; padding: 2px;">
+            <button class="btn-qte" style="width:30px; height:30px; border-radius:50%; border:none; background:#fff; font-weight:bold; font-size:16px; cursor:pointer;" onclick="window.enlever(${i})">-</button>
+            <span class="qte-valeur" id="qte-${i}" style="margin: 0 10px; font-weight: bold; min-width: 15px; font-size:14px;">0</span>
+            <button class="btn-qte" style="width:30px; height:30px; border-radius:50%; border:none; background:#fff; font-weight:bold; font-size:16px; cursor:pointer;" onclick="window.ajouter(${i})">+</button>
+          </div>
+          <p class="soustotal" id="soustotal-${i}" style="font-size: 11px; margin: 4px 0 0 0; color: #555;">0.00 RD$</p>
         </div>
-        <p class="soustotal" id="soustotal-${index}">0.00 RD$</p>
-      </div>
+      </td>
     `;
-    catalogue.appendChild(div);
-  });
+
+    // Deuxième colonne (Produit de droite - si existant)
+    if (i + 1 < produits.length) {
+      const p2 = produits[i + 1];
+      htmlContenu += `
+        <td style="width: 50%; padding: 8px; border: 1px solid #eee; vertical-align: top;">
+          <div style="text-align: center; margin-bottom: 6px;">
+            <span style="font-size: 24px;">${p2.icone}</span>
+            <h3 style="font-size: 14px; margin: 4px 0 2px 0; color: #333; font-weight: bold; line-height: 1.2;">${p2.nom}</h3>
+            <p style="font-size: 11px; margin: 0; color: #888;">${p2.categorie}</p>
+            <p style="font-size: 13px; margin: 4px 0; color: #2ecc71; font-weight: bold;">${p2.prix.toFixed(2)} RD$</p>
+          </div>
+          <div style="display: block; text-align: center;">
+            <div style="display: inline-flex; align-items: center; background: #f1f2f6; border-radius: 20px; padding: 2px;">
+              <button class="btn-qte" style="width:30px; height:30px; border-radius:50%; border:none; background:#fff; font-weight:bold; font-size:16px; cursor:pointer;" onclick="window.enlever(${i + 1})">-</button>
+              <span class="qte-valeur" id="qte-${i + 1}" style="margin: 0 10px; font-weight: bold; min-width: 15px; font-size:14px;">0</span>
+              <button class="btn-qte" style="width:30px; height:30px; border-radius:50%; border:none; background:#fff; font-weight:bold; font-size:16px; cursor:pointer;" onclick="window.ajouter(${i + 1})">+</button>
+            </div>
+            <p class="soustotal" id="soustotal-${i + 1}" style="font-size: 11px; margin: 4px 0 0 0; color: #555;">0.00 RD$</p>
+          </div>
+        </td>
+      `;
+    } else {
+      // Cellule vide pour boucher la ligne si le nombre total de produits est impair
+      htmlContenu += `<td style="width: 50%;"></td>`;
+    }
+
+    htmlContenu += `</tr>`;
+  }
+
+  table.innerHTML = htmlContenu;
+  catalogue.appendChild(table);
   mettreAJourTotal();
 }
